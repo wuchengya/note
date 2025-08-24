@@ -167,3 +167,52 @@ public:
 ```
 
 找到中间的节点，然后反转一下，再从头比较。
+
+## [141. 环形链表 - 力扣（LeetCode）](https://leetcode.cn/problems/linked-list-cycle/submissions/655969755/?envType=study-plan-v2&envId=top-100-liked)
+
+快慢指针
+
+```cpp
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+        ListNode* fast = head,*slow = head;
+        while(fast&&fast->next)
+        {
+            slow = slow->next;
+            fast = fast->next->next;
+            if(slow==fast) return true;
+        }
+        return false;
+    }
+};
+```
+
+快指针是否会每次都跳过慢指针，造成即使有环也不会相遇的情况？
+
+不会！根据相对性，快指针每次走两步，慢指针每次走一步，那不就相当于快指针每次走一步，慢指针一步都不走码？
+
+## [19. 删除链表的倒数第 N 个结点 - 力扣（LeetCode）](https://leetcode.cn/problems/remove-nth-node-from-end-of-list/submissions/656065026/?envType=study-plan-v2&envId=top-100-liked)
+
+```cpp
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* s = new ListNode();
+        s->next = head;
+        head = s;
+        ListNode* first = head,*second = head;
+        for(int i = 0;i < n;i++) first = first->next;
+        while(first->next)
+        {
+            first = first->next;
+            second = second->next;
+        }
+        second->next = second->next->next;
+        return s->next;
+
+    }
+};
+```
+
+快慢指针，相距离n+1当快指针到达最后节点时，慢指针刚好在要删除节点的前一个结点。
