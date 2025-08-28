@@ -793,4 +793,86 @@ spring:
 
 ## Day3
 
-#### Docker
+### RabbitMq
+
+#### SpringAMQP
+
+使用：
+
+在父工程中导入依赖
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-amqp</artifactId>
+</dependency>
+```
+
+##### 利用SpringAMQP去发送消息
+
+1配置 RabbitMQ 连接（`application.yml` 配置）
+
+在 `publisher` 服务的 `application.yml` 中，添加 Spring 对 RabbitMQ 的连接配置：
+
+```yaml
+spring:
+  rabbitmq:
+    host: 192.168.150.101 # 主机名，需根据实际 RabbitMQ 部署地址调整
+    port: 5672 # RabbitMQ 的 AMQP 协议默认端口 
+    virtual-host: / # 虚拟主机，RabbitMQ 中用于逻辑隔离的概念
+    username: itcast # 登录用户名
+    password: 123321 # 登录密码 
+```
+
+作用：让 Spring Boot 项目能通过这些配置参数，与指定的 RabbitMQ 服务器建立连接 。
+
+2测试
+
+```java
+@RunWith(SpringRunner.class) 
+@SpringBootTest 
+public class SpringAmqpTest {
+
+    @Autowired 
+    private RabbitTemplate rabbitTemplate; 
+
+    @Test 
+    public void testSimpleQueue() {
+        String queueName = "simple.queue"; 
+        String message = "hello, spring amqp!"; 
+        rabbitTemplate.convertAndSend(queueName, message); 
+    }
+}
+```
+
+#### 利用SpringAMQP去接受消息
+
+1配置 RabbitMQ 连接（`application.yml` 配置）
+
+在 `publisher` 服务的 `application.yml` 中，添加 Spring 对 RabbitMQ 的连接配置：
+
+```yaml
+spring:
+  rabbitmq:
+    host: 192.168.150.101 # 主机名，需根据实际 RabbitMQ 部署地址调整
+    port: 5672 # RabbitMQ 的 AMQP 协议默认端口 
+    virtual-host: / # 虚拟主机，RabbitMQ 中用于逻辑隔离的概念
+    username: itcast # 登录用户名
+    password: 123321 # 登录密码 
+```
+
+作用：让 Spring Boot 项目能通过这些配置参数，与指定的 RabbitMQ 服务器建立连接 。
+
+2
+
+```java
+@Component
+public class SpringRabbitListener {
+
+    @RabbitListener(queues = "simple.queue")
+    public void listenSimpleQueueMessage(String msg) throws InterruptedException {
+    System.out.println("spring 消费者接收到消息 : 【" + msg + "】");
+    }
+}
+```
+
