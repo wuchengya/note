@@ -4,7 +4,7 @@
 
 ### 什么是微服务？
 
-在大型项目中，为了降低代码之间的耦合，我们分模块开发，每个模块只负责一个部分的功能，那么如果其他的模块要使用到另一个模块的数据呢?每个模块都会向外提供一个接口，通过这个接口就可以调用到另一个模块的信息，实则是在当今的模块中发送http请求访问服务器，然后拿到的数据。
+在大型项目中，为了降低代码之间的耦合，我们分模块开发，每个模块只负责一个部分的功能，那么如果其他的模块要使用到另一个模块的数据呢?每个模块都会向外提供一个或者多个接口，通过这个接口就可以调用到另一个模块的信息，实则是在当今的模块中发送http请求访问服务器，然后拿到的数据。
 
 如何发送http请求？
 
@@ -29,17 +29,12 @@ SomeData = restTemplate.getForEntity(url,SomeData.class);我们的返回值是js
 #### Eureka 的作用
 
 1. **服务发现机制**
-
 - 服务提供者启动时向 Eureka 注册自己的信息
 - Eureka 服务器保存这些注册信息
 - 服务消费者根据服务名称向 Eureka 拉取提供者信息
-
 2. **负载均衡处理**
-
 - 当存在多个服务提供者时，服务消费者利用负载均衡算法，从服务列表中挑选一个合适的提供者
-
 3. **健康状态监控**
-
 - **心跳机制**：服务提供者每隔30秒向 Eureka Server 发送心跳请求，报告健康状态
 - **状态更新**：Eureka 会实时更新记录服务列表信息，心跳不正常的服务会被自动删除
 - **信息同步**：消费者可以拉取到最新的服务状态信息，确保请求发送到健康的服务实例
@@ -146,14 +141,14 @@ IRule 就是 Ribbon 负载均衡策略的核心接口。它定义了“如何从
 
 Ribbon 已经为我们提供了多种开箱即用的负载均衡策略，它们都是 IRule 接口的实现类。
 
-| 类名                          | 策略描述                                                     |
-| ----------------------------- | ------------------------------------------------------------ |
-| **RoundRobinRule**            | **轮询（Round Robin）**。按顺序循环选择服务实例。比如有3个实例，第一次选第1个，第二次选第2个，第三次选第3个，第四次再回到第1个。这是最经典的策略。 |
-| **RandomRule**                | **随机（Random）**。从服务列表中随机选择一个实例。           |
-| **AvailabilityFilteringRule** | **可用性过滤**。会先过滤掉那些多次连接失败、处于“断路器跳闸”状态的服务，然后再对剩下的服务进行轮询。 |
-| **WeightedResponseTimeRule**  | **加权响应时间**。根据每个服务实例的平均响应时间来计算权重。响应时间越短，权重越大，被选中的概率就越高。它在启动时会先用轮询，等统计信息足够后再切换。 |
-| **RetryRule**                 | **重试**。在默认的轮询策略基础上，增加了重试机制。如果在指定时间内选择的实例无法连接，它会自动重试，选择下一个实例。 |
-| **BestAvailableRule**         | **最佳可用**。选择并发请求量最小的服务器。它会遍历所有实例，选出那个最“闲”的。 |
+| 类名                            | 策略描述                                                                                                                       |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **RoundRobinRule**            | **轮询（Round Robin）**。按顺序循环选择服务实例。比如有3个实例，第一次选第1个，第二次选第2个，第三次选第3个，第四次再回到第1个。这是最经典的策略。                                        |
+| **RandomRule**                | **随机（Random）**。从服务列表中随机选择一个实例。                                                                                             |
+| **AvailabilityFilteringRule** | **可用性过滤**。会先过滤掉那些多次连接失败、处于“断路器跳闸”状态的服务，然后再对剩下的服务进行轮询。                                                                      |
+| **WeightedResponseTimeRule**  | **加权响应时间**。根据每个服务实例的平均响应时间来计算权重。响应时间越短，权重越大，被选中的概率就越高。它在启动时会先用轮询，等统计信息足够后再切换。                                              |
+| **RetryRule**                 | **重试**。在默认的轮询策略基础上，增加了重试机制。如果在指定时间内选择的实例无法连接，它会自动重试，选择下一个实例。                                                               |
+| **BestAvailableRule**         | **最佳可用**。选择并发请求量最小的服务器。它会遍历所有实例，选出那个最“闲”的。                                                                                 |
 | **ZoneAvoidanceRule**         | **区域回避**。这是 **Spring Cloud Ribbon 的默认规则**。它综合了服务所在区域（Zone）和可用性来选择服务器。在没有多区域（Zone）部署的简单场景下，它的行为基本等同于 RoundRobinRule（轮询/默认）。 |
 
 ##### 如何更换默认的负载均衡策略？
@@ -321,9 +316,9 @@ startup.cmd
 
 ```
 spring:
-	cloud:
-		nacos:
-			sever-addr: localhost:8848
+    cloud:
+        nacos:
+            sever-addr: localhost:8848
 ```
 
 #### nacoa服务分级存储模型
@@ -332,11 +327,11 @@ spring:
 
 ```
 spring:
-	cloud:
-		nacos:
-			sever-addr: localhost:8848
-			discovery:
-				cluster-name: HZ（自定义）
+    cloud:
+        nacos:
+            sever-addr: localhost:8848
+            discovery:
+                cluster-name: HZ（自定义）
 ```
 
 上述操作讲这个实例位置订到了杭州
@@ -363,12 +358,12 @@ userservice(b服务):
 
 ```yml
 spring:
-	cloud:
-		nacos:
-			sever-addr: localhost:8848
-			discovery:
-				cluster-name: HZ（自定义）
-				namcespace: id
+    cloud:
+        nacos:
+            sever-addr: localhost:8848
+            discovery:
+                cluster-name: HZ（自定义）
+                namcespace: id
 ```
 
 这样的话此服务就会被分配到另一个空间中，不同的空间不能够互相访问
@@ -384,12 +379,9 @@ spring:
 ```
 
 1. Nacos 与 Eureka 的共同点
-
 - 都支持服务注册和服务拉取
 - 都支持服务提供者心跳方式做健康检测
-
 2. Nacos 与 Eureka 的区别
-
 - Nacos 支持服务端主动检测提供者状态：临时实例采用心跳模式，非临时实例采用主动检测模式
 - 临时实例心跳不正常会被剔除，非临时实例则不会被剔除
 - Nacos 支持服务列表变更的消息推送模式，服务列表更新更及时
@@ -400,7 +392,6 @@ spring:
 #### Nacos配置管理
 
 1. 依赖引入
-
 - 需在项目中添加 **Nacos 配置管理客户端依赖**，代码片段：
 
 ```xml
@@ -414,7 +405,6 @@ spring:
 作用是让应用能**连接 Nacos 配置中心**，拉取配置。
 
 2. 配置引导文件
-
 - 在`userservice`的`resource`目录新增 **`bootstrap.yml`文件**（优先级高于`application.yml` ），配置内容：
 
 ```yaml
@@ -506,9 +496,9 @@ feign:
 **步骤：**
 
 1. **第一步：创建配置类**
-
+   
    首先，创建一个独立的 Java 配置类，用于定义 Feign 的日志级别 Bean。
-
+   
    ```
    public class FeignClientConfiguration {
    
@@ -519,17 +509,17 @@ feign:
        }java
    }
    ```
-
+   
    **注意**：这个配置类不要加上 @Configuration 注解，并且不要放在主启动类能够扫描到的包下，以避免它被意外应用为全局配置。
-
+   
    ------
 
 2. **第二步：应用配置（二选一）**
-
+   
    选择将这个配置类应用为全局或局部配置。
-
+   
    将配置类应用到启动类的 @EnableFeignClients 注解上，通过 defaultConfiguration 属性指定。
-
+   
    ```java
    // 在你的 Spring Boot 启动类上
    @EnableFeignClients(defaultConfiguration = FeignClientConfiguration.class)
@@ -538,11 +528,11 @@ feign:
        // ...
    }
    ```
-
+   
    将配置类应用到具体的 @FeignClient 注解上，通过 configuration 属性指定。
-
+   
    codeJava
-
+   
    ```java
    // 在你的 Feign 接口上
    @FeignClient(value = "userservice", configuration = FeignClientConfiguration.class)
@@ -744,20 +734,20 @@ public class AuthorizeFilter implements GlobalFilter {
 - **全局过滤器作用**：对所有路由生效，可自定义处理逻辑
 
 - 实现全局过滤器步骤
-
+  
   ：
-
+  
   1. 实现`GlobalFilter`接口
   2. 添加`@Order`注解或实现`Ordered`接口
   3. 编写处理逻辑
-
+  
   #### 全局过滤器 vs 默认过滤器
-
-  | 特性         | **全局过滤器 (GlobalFilter)**              | **默认过滤器 (default-filters)**                     |
-  | ------------ | ------------------------------------------ | ---------------------------------------------------- |
-  | **实现方式** | **Java 代码**，实现 GlobalFilter 接口      | **YAML 配置文件**                                    |
-  | **灵活性**   | **极高**，可以编写任意复杂的业务逻辑       | **有限**，只能使用 Gateway 内置的过滤器工厂          |
-  | **适用场景** | 统一鉴权、日志监控、安全校验等**复杂业务** | 添加统一请求头、剥离路径前缀等**简单、标准化的操作** |
+  
+  | 特性       | **全局过滤器 (GlobalFilter)**       | **默认过滤器 (default-filters)**  |
+  | -------- | ------------------------------ | ---------------------------- |
+  | **实现方式** | **Java 代码**，实现 GlobalFilter 接口 | **YAML 配置文件**                |
+  | **灵活性**  | **极高**，可以编写任意复杂的业务逻辑           | **有限**，只能使用 Gateway 内置的过滤器工厂 |
+  | **适用场景** | 统一鉴权、日志监控、安全校验等**复杂业务**        | 添加统一请求头、剥离路径前缀等**简单、标准化的操作** |
 
 ##### 过滤器执行顺序规则
 
@@ -795,7 +785,7 @@ spring:
 
 ### RabbitMq
 
-#### SpringAMQP
+#### SpringAMQP（将复杂度操作简化）
 
 使用：
 
@@ -808,7 +798,7 @@ spring:
 </dependency>
 ```
 
-##### 利用SpringAMQP去发送消息
+#### 利用SpringAMQP去发送消息
 
 1配置 RabbitMQ 连接（`application.yml` 配置）
 
@@ -876,3 +866,115 @@ public class SpringRabbitListener {
 }
 ```
 
+信息预取：这个是消费者可以预先从队列中拿到的消息，如果有多个消费者的话，他们会平分消息队列中的消息，但是有的消费者消费能力强，有的弱，根据能者多劳原理，我们要让消费强的消费者消费更多的消息。
+
+```yaml
+spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: itcast
+    password: 123321
+    virtual-host: /
+    listener:
+      simple:
+        prefetch: 1
+```
+
+prefetch就是控制预取的，默认是无限，我们可以设置为1，先取一条消息，等消费完毕再继续取。
+
+#### 利用SpringAMQP演示FanoutExchange的使用
+
+```java
+@Configuration
+public class FanoutConfig {
+    //声明交换机
+    @Bean
+    public FanoutExchange fanoutExchange(){
+        return new FanoutExchange("itcast.fanout");
+    }
+
+    //声明一个队列
+    @Bean
+    public Queue fanoutQueue1(){
+        return new Queue("fanout.queue1");
+    }
+
+    //绑定队列1到交换机
+    @Bean
+    public Binding bindingQueue1(Queue fanoutQueue1,FanoutExchange fanoutExchange){
+        return BindingBuilder.bind(fanoutQueue1).to(fanoutExchange);
+    }
+
+    @Bean
+    public Queue fanoutQueue2(){
+        return new Queue("fanout.queue2");
+    }
+
+    @Bean
+    public Binding bindingQueue2(Queue fanoutQueue2,FanoutExchange fanoutExchange){
+        return BindingBuilder.bind(fanoutQueue2).to(fanoutExchange);
+    }
+}
+```
+
+```java
+//向交换机内发送信息
+@Test
+    public void testSendFanoutExchange(){
+        //交换机名称
+        String exchangeName = "itcast.fanout";
+        //消息
+        String message = "hello everyone!";
+
+        rabbitTemplate.convertAndSend(exchangeName,"",message);
+
+    }
+```
+
+不要忘记绑定消费者到队列。
+
+这种交换机将消息发送到所有绑定到它的队列。
+
+#### 利用SpringAMPQ演示DirectExchange的使用
+
+```java
+@RabbitListener(bindings = @QueueBinding(
+            value = @Queue(name = "direct.queue1"),
+            exchange = @Exchange(name = "itcast.direct",type = DIRECT),
+            key = {"red","blue"}
+    ))
+    public void listenDirectQueue1(String msg){
+        System.out.println(msg);
+    }
+//声明direct.queue1的队列，绑定交换机itcast.direct，指定交换机类型，指定队列bindingkey = {"red","blue"}
+//这个逻辑不需要注册为Bean,直接写在listener中就行
+rabbitTemplate.convertAndSend(exchangeName,routingKey,message);
+```
+
+向特定的队列发送消息
+
+#### TopicExchange和DirectExchange的区别
+
+对于绑定Topic交换机的队列来说，队列的key可支持通配符，但是就两个#表示匹配多个任意字符，而*支持一个任意字符，这就是差异，还有指定类型的时候要指定成为Topic。
+
+#### 消息转换器
+
+将消息发送到rabbitmq时，java会使用相应的操作将我们的各种各样的信息给转成一段序列，但是这个转化操作太辣了，我们要使用更好的去覆盖它，这里要注意，生产者和消费者都要对消息处理，因此我们要引入依赖到这两个中。
+
+```xml
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+    <version>2.19.2</version>
+</dependency>
+```
+
+```java
+下面这段代码需要注册为bean被spring管理，生产者和消费者都需要。
+@Bean
+public MessageConverter messageConverter(){
+    return new Jackson2JsonMessageConverter();
+}
+接受的时候直接使用和发送相同的数据结构就行。
+```

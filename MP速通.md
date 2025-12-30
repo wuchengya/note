@@ -71,3 +71,34 @@ public class MyBatisConfig {
 第二步：使用
 
 ![image-20250903215539463](E:\Typora picture\image-20250903215539463.png)
+
+
+
+
+
+总结：
+
+更新删除用update(),查找用query()
+
+```ABAP
+query()
+一般不使用，我们都使用带Lambda的，这样比较安全
+
+lambdaQuery()
+这个是上面的安全版本，可以满足很多查询要求了
+LambdaQueryWrapper()
+这个是为了满足剩下的10%的查询需要
+LambdaQueryChainWrapper()
+这个是上面的升级版，可以自己执行查询，上面只是构造一个构造器，不能自主执行
+
+
+update()
+
+lambdaUpdate()
+
+LambdaUpdateWrapper()
+相对于LambdaQueryWrapper()有特殊的方法，是关于set的，如.sql(),等
+
+LambdaUpdateChainWrapper()
+```
+
